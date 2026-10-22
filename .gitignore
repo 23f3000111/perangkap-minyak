@@ -1,0 +1,18 @@
+# Client source material and the archived design concepts stay on the
+# workstation; the site carries everything it needs under site/.
+Images/
+New/
+_archive/
+
+# Local tooling
+.agents/
+skills-lock.json
+.playwright-mcp/
+tools/.cache/
+__pycache__/
+*.pyc
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini

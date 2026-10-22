@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://23f3000111.github.io/perangkap-minyak/sitemap.xml

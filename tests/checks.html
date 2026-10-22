@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perangkap Minyak checks</title>
+<link rel="icon" href="../site/assets/img/brand/favicon-navy.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../site/assets/css/chat.css">
+<link rel="stylesheet" href="../site/assets/css/site.css">
+<style>body{font:16px/1.6 system-ui,sans-serif;padding:32px;max-width:900px}#main{display:none}</style>
+</head>
+<body>
+<main id="main"></main>
+<div id="report"></div>
+<script src="../site/assets/data/site.js"></script>
+<script src="../site/assets/data/catalog.js"></script>
+<script src="../site/assets/data/library.js"></script>
+<script src="../site/assets/js/core.js"></script>
+<!-- The harness lives beside site/, not in it, so asset paths start one level up. -->
+<script>PM.assets = '../site/assets/';</script>
+<script src="../site/assets/js/motion.js"></script>
+<script src="../site/assets/js/frames.js"></script>
+<script src="../site/assets/js/chat.js"></script>
+<script src="../site/assets/js/site.js"></script>
+<script src="checks.js"></script>
+<script>CHECKS.render(CHECKS.run());</script>
+</body>
+</html>
