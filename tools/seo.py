@@ -7,6 +7,10 @@ the shells themselves. Everything between <!-- seo --> and <!-- /seo --> is
 rewritten on each run; site/sitemap.xml and site/robots.txt are rewritten
 whole.
 
+404.html gets only a <base>: GitHub Pages serves it at whatever missing
+address was asked for, and its relative links must still resolve from the
+site root, which is the path part of the base address.
+
     python tools/seo.py                                     # the github.io address
     python tools/seo.py --base https://www.example.com.my/  # after a move to a domain
 
@@ -21,6 +25,7 @@ import json
 import os
 import re
 import subprocess
+import urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, 'site')
@@ -29,7 +34,7 @@ BASE = 'https://23f3000111.github.io/perangkap-minyak/'
 # One shell renders every item of its kind, so it has no single address of
 # its own; the page sets the canonical once it knows the item.
 DYNAMIC = {'product.html', 'service.html', 'article.html'}
-SKIP = {'404.html'}
+NOT_FOUND = {'404.html'}
 
 DUMP = r"""
 global.window = {};
@@ -125,11 +130,15 @@ def main():
 
     pages = sorted(os.path.basename(f) for f in glob.glob(os.path.join(SITE, '*.html')))
     for page in pages:
-        if page in SKIP:
-            continue
         path = os.path.join(SITE, page)
         s = io.open(path, encoding='utf-8').read()
         s = re.sub(r'\n<!-- seo -->.*?<!-- /seo -->', '', s, flags=re.S)
+        if page in NOT_FOUND:
+            vp = re.search(r'<meta name="viewport"[^>]*>', s)
+            root = urllib.parse.urlparse(base).path or '/'
+            s = s[:vp.end()] + '\n<!-- seo -->\n<base href="%s">\n<!-- /seo -->' % root + s[vp.end():]
+            io.open(path, 'w', encoding='utf-8', newline='\n').write(s)
+            continue
         title = html.unescape(re.search(r'<title>(.*?)</title>', s).group(1))
         desc_m = re.search(r'<meta name="description" content="(.*?)">', s)
         desc = html.unescape(desc_m.group(1))
@@ -142,7 +151,7 @@ def main():
         io.open(path, 'w', encoding='utf-8', newline='\n').write(s)
 
     today = datetime.date.today().isoformat()
-    urls = [base + ('' if p == 'index.html' else p) for p in pages if p not in SKIP | DYNAMIC]
+    urls = [base + ('' if p == 'index.html' else p) for p in pages if p not in NOT_FOUND | DYNAMIC]
     urls += [base + 'product.html?p=' + x for x in d['products']]
     urls += [base + 'service.html?s=' + x for x in d['services']]
     urls += [base + 'article.html?a=' + x for x in d['articles']]
@@ -153,7 +162,7 @@ def main():
     io.open(os.path.join(SITE, 'sitemap.xml'), 'w', encoding='utf-8', newline='\n').write('\n'.join(xml) + '\n')
     io.open(os.path.join(SITE, 'robots.txt'), 'w', encoding='utf-8', newline='\n').write(
         'User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n' % base)
-    print('%d pages tagged, %d addresses in the sitemap, base %s' % (len(pages) - len(SKIP), len(urls), base))
+    print('%d pages tagged, %d addresses in the sitemap, base %s' % (len(pages) - len(NOT_FOUND), len(urls), base))
 
 
 if __name__ == '__main__':

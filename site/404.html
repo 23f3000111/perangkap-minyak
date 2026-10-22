@@ -3,18 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-/* GitHub Pages answers any missing address with this page, at that address,
-   so relative links would resolve from wherever the visitor landed. Anchor
-   them to the site root first (the project folder on github.io). */
-(function () {
-  if (/\/404\.html$/.test(location.pathname)) return;
-  var seg = location.pathname.split('/')[1];
-  var base = document.createElement('base');
-  base.href = /\.github\.io$/.test(location.hostname) && seg ? '/' + seg + '/' : '/';
-  document.head.appendChild(base);
-})();
-</script>
+<!-- seo -->
+<base href="/perangkap-minyak/">
+<!-- /seo -->
 <title>Page not found | Perangkap Minyak</title>
 <meta name="description" content="The page you asked for has moved, or the address has a typing mistake.">
 <meta name="robots" content="noindex">

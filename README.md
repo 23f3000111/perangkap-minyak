@@ -23,7 +23,7 @@ All wording is written as `{ en: '…', bm: '…' }` pairs.
 ## Working on it
 
 ```sh
-python tools/serve.py                 # http://127.0.0.1:8080/site/
+python tools/serve.py                 # http://127.0.0.1:8080/perangkap-minyak/, as GitHub Pages serves it
 ```
 
 Then open http://127.0.0.1:8080/tests/checks.html to run the 118 checks, and before a push:
